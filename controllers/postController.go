@@ -46,3 +46,26 @@ func PostsShow(c *gin.Context) {
 		"posts": post,
 	})
 }
+
+func PostsUpdate(c *gin.Context) {
+	id := c.Param("id")
+
+	var body struct {
+		Body  string
+		Title string
+	}
+
+	c.Bind(&body)
+
+	var post models.Post
+	initializers.DB.First(&post, id)
+
+	initializers.DB.Model(&post).Updates(models.Post{
+		Title: body.Title,
+		Body:  body.Body,
+	})
+
+	c.JSON(200, gin.H{
+		"posts": post,
+	})
+}
